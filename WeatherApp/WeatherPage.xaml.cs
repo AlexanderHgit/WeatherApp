@@ -6,6 +6,7 @@ using static System.Net.WebRequestMethods;
 using Microsoft.Maui.Animations;
 using System.Net;
 using System;
+using Microsoft.Maui.Controls;
 
 
 namespace WeatherApp;
@@ -29,23 +30,25 @@ After:
     public List<Models.List> WeatherList;
     private double latitude;
     private double longitude;
+  
 	public WeatherPage()
 	{
 		InitializeComponent();
+        BGImage.Source = null;
+        BGImage.Background = GlobalServices.GetGradient();
+        /* Unmerged change from project 'WeatherApp (net6.0-android)'
+        Before:
+                WeatherList = new List<Models.List>();
+        After:
+                WeatherList = new List<List>();
+        */
 
-/* Unmerged change from project 'WeatherApp (net6.0-android)'
-Before:
-        WeatherList = new List<Models.List>();
-After:
-        WeatherList = new List<List>();
-*/
-
-/* Unmerged change from project 'WeatherApp (net7.0-ios)'
-Before:
-        WeatherList = new List<Models.OpenWeather.List>();
-After:
-        WeatherList = new List<List>();
-*/
+        /* Unmerged change from project 'WeatherApp (net7.0-ios)'
+        Before:
+                WeatherList = new List<Models.OpenWeather.List>();
+        After:
+                WeatherList = new List<List>();
+        */
         WeatherList = new List<Models.List>();
 	}
     protected async override void OnAppearing()
@@ -62,19 +65,24 @@ After:
     }
     private async void ClickLocation_Tapped(object sender, EventArgs e)
     {
+
+        locationFrame.IsEnabled = false;
         await GetLocation();
         await GetWeatherDataByLocation(latitude, longitude);
 
     }
     public async Task GetWeatherDataByLocation(double latitude, double longitude)
     {
+      //FIGURE OUT WHATS WRONG
         var forecast = await ApiService.GetForecastByGps(latitude, longitude);
         var weather = await ApiService.GetWeatherByGPS(latitude, longitude);
         UpdateUI(weather,forecast);
     }
     private async void ImageButton_Clicked(object sender, EventArgs e)
     {
-        var response = await DisplayPromptAsync(title: "", message: "", placeholder: "Search weather by city",accept:"Search",cancel:"Cancel");
+        string response = await DisplayActionSheet("ActionSheet: Send to?", "Cancel", null, "Email", "Twitter", "Facebook");
+        Debug.WriteLine("Action: " + response);
+        //var response = await DisplayPromptAsync(title: "", message: "", placeholder: "Search weather by city",accept:"Search",cancel:"Cancel");
         if (response != null)
         {
             await GetWeatherDataByCity(response);
@@ -95,7 +103,8 @@ After:
     public async void UpdateUI(dynamic weather , dynamic forecast)
     {
         await MainGrid.FadeTo(0, 1000, Easing.Linear);
-    
+        imgHumidity.IsVisible = true;
+        imgWind.IsVisible = true;
         foreach (var item in forecast.list)
         {
             WeatherList.Add(item);
@@ -106,28 +115,44 @@ After:
         LblCity.Text = forecast.city.name;
     
         LblWeatherDescription.Text = weather.weather[0].description;
-        LblTemperature.Text = weather.main.temp.ToString();//result.list[0].main.temperature + "°C";
+        LblTemperature.Text = GlobalServices.GetTempScaleTemp(weather.main.temp.ToString());//result.list[0].main.temperature + "°C";
         LblHumidity.Text = weather.main.humidity + "%";
         LblWind.Text = weather.wind.speed + "km/h";
-        LblCurrentDay.Text = GlobalServices.GetUnixCurrentTime(weather.dt);
+        LblCurrentDay.Text = GlobalServices.ConvertUnixToTimeZone(weather.dt, "h:mm tt");
         ImgWeatherIcon.Source = weather.weather[0].customIcon;
-        GetLocationImage(forecast.city.name);
-        
+        if (SettingsServices.Get("BackgroundToggleOff", true) == false)
+        {
+            GetLocationImage(forecast.city.name);
+        }
+        else
+        {
+
+
+
+            await MainGrid.FadeTo(1, 1000, Easing.Linear);
+            locationFrame.IsEnabled = true;
+        }
     }
 
     public async void UpdateBG(string src)
     {
         
-        var image = src;
-        var imagesource = await ImageLoader.LoadImageFromUriAsync(image);
- 
+       Console.WriteLine(src);
+
+            var image = src;
+
+            var imagesource = await ImageLoader.LoadImageFromUriAsync(image);
         
-        BGImage.Source=src;
-        BGImage.Source = src;
-        if (imagesource != null)
-        {
+    
+
             BGImage.Source = imagesource;
-            await MainGrid.FadeTo(1, 1000, Easing.Linear);
+            if (imagesource != null)
+            {
+            
+            BGImage.Source = imagesource;
+                await MainGrid.FadeTo(1, 1000, Easing.Linear);
+            
         }
+
     }
 }  

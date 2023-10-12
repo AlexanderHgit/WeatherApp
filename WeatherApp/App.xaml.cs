@@ -5,8 +5,16 @@ public partial class App : Application
 	public App()
 	{
 		InitializeComponent();
-
-		MainPage = new WeatherPage();
+        VersionTracking.Track();
+        if(VersionTracking.IsFirstLaunchEver == true)
+        {
+            MainPage = new SettingsPage();
+        }
+        else
+        {
+            MainPage = new SettingsPage();
+        }
+		
 	}
     protected override Window CreateWindow(IActivationState activationState)
     {

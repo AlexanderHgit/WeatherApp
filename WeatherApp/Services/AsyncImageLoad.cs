@@ -11,6 +11,7 @@ namespace WeatherApp.Services
     {
         public static async Task<ImageSource> LoadImageFromUriAsync(string imageUrl)
         {
+
             try
             {
                 using (var httpClient = new HttpClient())

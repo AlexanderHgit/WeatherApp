@@ -29,18 +29,20 @@
                    CornerRadius="35" 
                    HasShadow="True"
                    BorderColor="LightGray"
-                  WidthRequest="120">
+                  WidthRequest="120"
+                           x:Name="locationFrame">
                         <Label Text="Your location"
                        FontSize="Default"/>
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer x:Name="TapLocation" Tapped="ClickLocation_Tapped"/>
                         </Frame.GestureRecognizers>
                     </Frame>
+                    
                     <ImageButton Source="search_icon.png" 
                          HeightRequest="30" 
                          WidthRequest="30" 
                          HorizontalOptions="EndAndExpand"
-                         Clicked="ImageButton_Clicked"/>
+                         Clicked="ImageButton_Clicked" x:Name="searchBtn"/>
                 </StackLayout>
 
                 <StackLayout Grid.Row="1"
@@ -71,27 +73,34 @@
                    Grid.Column="0"
                    HorizontalOptions="Center"
                    HeightRequest="25"
-                   Source="rain_high_weather_percentage_precipitation_drop_humidity.png"/>
+                   Source="rain_high_weather_percentage_precipitation_drop_humidity.png"
+                           x:Name="imgHumidity"
+                           IsVisible="false"/>
                     <Label x:Name="LblHumidity"
                    Grid.Row="1"
                    Grid.Column="0"
-                   HorizontalOptions="Center"/>
+                   HorizontalOptions="Center"
+                           />
                     <Label x:Name="LblTemperature" 
                    Grid.Row="0" 
                    Grid.Column="1"
                    Grid.RowSpan="2"
                    HorizontalOptions="Center"
                    FontSize="40"
-                   FontAttributes="Bold"/>
+                   FontAttributes="Bold"
+                            />
                     <Image Grid.Row="0" 
                    Grid.Column="2"
                    HorizontalOptions="Center"
                    HeightRequest="25"
-                   Source="weather_wind_speed_fast_breeze_windy.png"/>
+                   Source="weather_wind_speed_fast_breeze_windy.png"
+                           x:Name="imgWind"
+                           IsVisible="false"/>
                     <Label x:Name="LblWind"
                    Grid.Row="1"
                    Grid.Column="2"
-                   HorizontalOptions="Center"/>
+                   HorizontalOptions="Center"
+                           />
                     <Label x:Name="LblCurrentDay"
                     Grid.Row="2"
                     Grid.Column="1"
@@ -126,7 +135,7 @@
                                    FontSize="Small"
                                        
                                    HorizontalOptions="Center" 
-                                   Text="{Binding dateTime}"/>
+                                   Text="{Binding TimeZoneTime}"/>
                                 <Label Grid.Row="3"
                                        FontSize="Small"
                                        HorizontalOptions="Center"

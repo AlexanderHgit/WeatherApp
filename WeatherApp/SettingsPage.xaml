@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="WeatherApp.SettingsPage"
+             Title="SettingsPage">
+    <Grid x:Name="SettingsGrid">
+
+        <StackLayout 
+        HorizontalOptions="Center"
+                VerticalOptions="Center">
+                <Picker x:Name="PicTimeZone"
+        Title="Select a TimeZone" SelectedIndex="0">
+                <Picker.ItemsSource  > 
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>EST</x:String>
+                            <x:String>CST</x:String>
+                            <x:String>MST</x:String>
+                            <x:String>PST</x:String>
+
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
+                <Picker x:Name="PicTempScale"
+        Title="Select a Temperature Scale"  SelectedIndex="0">
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>Fahrenheit (°F)</x:String>
+                            <x:String>Celsius (°C)</x:String>
+
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
+                <Label
+    FontSize="12"
+ Text="Disable Background image ( faster load times )"
+    TextColor="Black"/>
+                <Switch x:Name="SwiBG"  />
+
+                <Button Text="Continue"
+                Clicked="OnButtonClicked"/>
+            </StackLayout>
+        
+    </Grid>
+</ContentPage>
+    

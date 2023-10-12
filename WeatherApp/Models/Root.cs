@@ -48,6 +48,8 @@ namespace WeatherApp.Models
         public String dateTime => GlobalServices.ParseDateTime(dt_txt).ToString("h tt");
         public DateTime was => GlobalServices.ParseDateTime(dt_txt);
         public DayOfWeek what => was.DayOfWeek;
+        public String TimeZoneTime => GlobalServices.ConvertUnixToTimeZone(dt, "h tt");
+        public String TempScaleTemp;
         public Main main { get; set; }
         public List<Weather> weather { get; set; }
         public Clouds clouds { get; set; }
@@ -63,7 +65,7 @@ namespace WeatherApp.Models
     {
         public double temp { get; set; }
         public double temperature => Math.Round(temp);
-        public string temp_symb => temperature.ToString()+ "°C";
+        public string temp_symb => GlobalServices.GetTempScaleTemp(temperature.ToString());
         public double feels_like { get; set; }
         public double temp_min { get; set; }
         public double temp_max { get; set; }
