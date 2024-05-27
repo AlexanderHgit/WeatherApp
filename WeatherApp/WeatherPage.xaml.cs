@@ -7,7 +7,7 @@ using Microsoft.Maui.Animations;
 using System.Net;
 using System;
 using Microsoft.Maui.Controls;
-
+using Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;
 
 namespace WeatherApp;
 
@@ -33,9 +33,13 @@ After:
   
 	public WeatherPage()
 	{
-		InitializeComponent();
+        
+        InitializeComponent();
+        
+        bgGrid.BackgroundColor = GlobalServices.GetbgColor();
         BGImage.Source = null;
         BGImage.Background = GlobalServices.GetGradient();
+        
         /* Unmerged change from project 'WeatherApp (net6.0-android)'
         Before:
                 WeatherList = new List<Models.List>();
@@ -53,6 +57,7 @@ After:
 	}
     protected async override void OnAppearing()
     {
+        await MainGrid.FadeTo(1, 1000, Easing.Linear);
         base.OnAppearing();
         await GetLocation();
   }
@@ -66,7 +71,7 @@ After:
     private async void ClickLocation_Tapped(object sender, EventArgs e)
     {
 
-        locationFrame.IsEnabled = false;
+        
         await GetLocation();
         await GetWeatherDataByLocation(latitude, longitude);
 
@@ -80,12 +85,21 @@ After:
     }
     private async void ImageButton_Clicked(object sender, EventArgs e)
     {
-        string response = await DisplayActionSheet("ActionSheet: Send to?", "Cancel", null, "Email", "Twitter", "Facebook");
-        Debug.WriteLine("Action: " + response);
-        //var response = await DisplayPromptAsync(title: "", message: "", placeholder: "Search weather by city",accept:"Search",cancel:"Cancel");
+        string response = entrySearch.Text;
         if (response != null)
         {
-            await GetWeatherDataByCity(response);
+            try
+            {
+                entrySearch.PlaceholderColor = Colors.Black;
+                entrySearch.Placeholder = "Search by name or by zipcode (US)";
+                entrySearch.Text = "";
+                await GetWeatherDataByCity(response);
+            }catch (Exception ex)
+            {
+                entrySearch.Text = "";
+                entrySearch.PlaceholderColor = Colors.Red;
+                entrySearch.Placeholder= "Error try again";
+            }
         }
    }
     public async Task GetWeatherDataByCity(string city)
@@ -120,20 +134,26 @@ After:
         LblWind.Text = weather.wind.speed + "km/h";
         LblCurrentDay.Text = GlobalServices.ConvertUnixToTimeZone(weather.dt, "h:mm tt");
         ImgWeatherIcon.Source = weather.weather[0].customIcon;
-        if (SettingsServices.Get("BackgroundToggleOff", true) == false)
+        if (SettingsServices.Get("BackgroundToggleOff", false) == false)
         {
+            Debug.WriteLine("yo");
             GetLocationImage(forecast.city.name);
         }
         else
         {
 
 
-
+            Debug.WriteLine("hey");
             await MainGrid.FadeTo(1, 1000, Easing.Linear);
-            locationFrame.IsEnabled = true;
+        
         }
     }
-
+    private async void ToSettings(object sender, EventArgs e)
+    {
+        await MainGrid.FadeTo(0, 1000, Easing.Linear);
+       
+      await Navigation.PushAsync(new SettingsPage(),false);
+    }
     public async void UpdateBG(string src)
     {
         
@@ -145,7 +165,6 @@ After:
         
     
 
-            BGImage.Source = imagesource;
             if (imagesource != null)
             {
             
