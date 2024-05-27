@@ -194,6 +194,13 @@ namespace WeatherApp.Models
         public Result result { get; set; }
         public string status { get; set; }
     }
-
+    public class zipinfo
+    {
+        public string zip { get; set; }
+        public string name { get; set; }
+        public double lat { get; set; }
+        public double lon { get; set; }
+        public string country { get; set; }
+    }
 
 }

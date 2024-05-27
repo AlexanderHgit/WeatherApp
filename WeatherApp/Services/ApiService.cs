@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -23,7 +24,22 @@ namespace WeatherApp.Services
         public static async Task<ForecastRoot> GetForecastByCity(string city)
         {
             var httpClient = new HttpClient();
-            var response = await httpClient.GetStringAsync(string.Format("http://api.openweathermap.org/data/2.5/forecast?q={0}&units=metric&appid={1}", city, GlobalServices.OpenAPI));
+            dynamic namereq;
+            dynamic name;
+            dynamic response;
+            if (GlobalServices.IsNumeric(city))
+            {
+                Debug.WriteLine("true");
+                namereq = await httpClient.GetStringAsync(string.Format("http://api.openweathermap.org/geo/1.0/zip?zip={0},US&appid=50004dac5bb8939d9ab28551340d7670", city, GlobalServices.OpenAPI));
+                name = JsonConvert.DeserializeObject<zipinfo>(namereq).name;
+                response = await httpClient.GetStringAsync(string.Format("http://api.openweathermap.org/data/2.5/forecast?q={0}&units=metric&appid={1}", name, GlobalServices.OpenAPI));
+            }
+            else
+            {
+
+
+                response = await httpClient.GetStringAsync(string.Format("http://api.openweathermap.org/data/2.5/forecast?q={0}&units=metric&appid={1}", city, GlobalServices.OpenAPI));
+            }
             return JsonConvert.DeserializeObject<ForecastRoot>(response);
 
         }

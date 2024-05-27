@@ -7,19 +7,20 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace WeatherApp.Services
 {
     class GlobalServices
     {
-        private static string v_PlaceAPI = "AIzaSyDF34OPzGr7oKIvgej72P6gtiTqrNGWWr0";
+        private static string v_PlaceAPI = "";
         public static string PlaceAPI
         {
             get { return v_PlaceAPI; }
             set { v_PlaceAPI = value; }
         }
-        private static string v_OpenAPI = "50004dac5bb8939d9ab28551340d7670";
+        private static string v_OpenAPI = "";
         public static string OpenAPI
         {
             get { return v_OpenAPI; }
@@ -86,7 +87,7 @@ namespace WeatherApp.Services
             var zone = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(current_time, timeZone);
             return zone.ToString(format);
         }
-        /* work on this */
+ 
 
         public static String GetTempScaleTemp(dynamic temp)
         {
@@ -132,10 +133,10 @@ namespace WeatherApp.Services
            Debug.WriteLine(DateTime.Now);
             DateTime currentTime = DateTime.Now;
 
-            // Create a DateTime object representing 6 PM
+            
             DateTime sixPM = DateTime.Today.AddHours(18);
 
-            // Compare the current time with 6 PM
+       
             if (currentTime < sixPM)
             {
 
@@ -150,7 +151,35 @@ namespace WeatherApp.Services
             return gradientBrush;
 
         }
+        public static Color GetbgColor()
+        {
 
+
+          
+            DateTime currentTime = DateTime.Now;
+
+           
+            DateTime sixPM = DateTime.Today.AddHours(18);
+
+
+            if (currentTime < sixPM)
+            {
+
+                return Colors.LightBlue;
+            }
+            else
+            {
+                return Colors.DarkBlue;
+            }
+            
+
+        }
+        public static bool IsNumeric(string input)
+        {
+
+            Regex regex = new Regex("^[0-9]+$");
+            return regex.IsMatch(input);
+        }
     }
 }
      

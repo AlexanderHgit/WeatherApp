@@ -1,21 +1,13 @@
 ﻿namespace WeatherApp;
-
+using Microsoft.Maui.Controls;
 public partial class App : Application
 {
 	public App()
 	{
 		InitializeComponent();
         VersionTracking.Track();
-        if(VersionTracking.IsFirstLaunchEver == true)
-        {
-            MainPage = new SettingsPage();
-        }
-        else
-        {
-            MainPage = new SettingsPage();
-        }
-		
-	}
+        MainPage = new NavigationPage(new SettingsPage());
+    }
     protected override Window CreateWindow(IActivationState activationState)
     {
         var window = base.CreateWindow(activationState);
