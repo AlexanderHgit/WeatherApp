@@ -48,8 +48,8 @@ NavigationPage.HasBackButton="False"
                         </Image>
                         <Entry
                         x:Name="entrySearch"
-                        Placeholder="Search by name or by zipcode"
-                        WidthRequest="250"
+                        Placeholder="Press Enter to search by name or by zipcode"
+                        WidthRequest="325"
                         TextColor="DimGrey"
                         PlaceholderColor="DimGrey"
                         BackgroundColor="GhostWhite"

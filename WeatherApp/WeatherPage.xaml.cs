@@ -71,14 +71,16 @@ After:
     private async void ClickLocation_Tapped(object sender, EventArgs e)
     {
 
-        
+        entrySearch.PlaceholderColor = Colors.Black;
+        entrySearch.Placeholder = "Searching for location...";
+        entrySearch.Text = "";
         await GetLocation();
         await GetWeatherDataByLocation(latitude, longitude);
 
     }
     public async Task GetWeatherDataByLocation(double latitude, double longitude)
     {
-      //FIGURE OUT WHATS WRONG
+     
         var forecast = await ApiService.GetForecastByGps(latitude, longitude);
         var weather = await ApiService.GetWeatherByGPS(latitude, longitude);
         UpdateUI(weather,forecast);
@@ -91,7 +93,7 @@ After:
             try
             {
                 entrySearch.PlaceholderColor = Colors.Black;
-                entrySearch.Placeholder = "Search by name or by zipcode (US)";
+                entrySearch.Placeholder = "Searching for location...";
                 entrySearch.Text = "";
                 await GetWeatherDataByCity(response);
             }catch (Exception ex)
@@ -133,6 +135,7 @@ After:
         LblHumidity.Text = weather.main.humidity + "%";
         LblWind.Text = weather.wind.speed + "km/h";
         LblCurrentDay.Text = GlobalServices.ConvertUnixToTimeZone(weather.dt, "h:mm tt");
+        entrySearch.Text = LblCity.Text;
         ImgWeatherIcon.Source = weather.weather[0].customIcon;
         if (SettingsServices.Get("BackgroundToggleOff", false) == false)
         {
