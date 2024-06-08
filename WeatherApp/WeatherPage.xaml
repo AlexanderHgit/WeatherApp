@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="WeatherApp.WeatherPage"
+    Title="WeatherPage"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    NavigationPage.HasNavigationBar="False"
+NavigationPage.HasBackButton="False"
+>
+    <Grid x:Name="bgGrid">
+        <Grid x:Name="MainGrid" Opacity="0">
+            <Image Source="blank.png" Aspect="AspectFill" x:Name="BGImage" />
+            <Border
+            Padding="10"
+           Background="#7f949494"
+            WidthRequest="1000"
+            HeightRequest="640"
+            Stroke="#7f949494"
+        StrokeThickness="4"
+        StrokeShape="RoundRectangle 10,10,10,10"
+        >
+
+
+
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="20">
+
+                    <StackLayout
+                    Grid.Row="0"
+                    Margin="20,20,20,0"
+                    Orientation="Horizontal"
+                >
+
+                        <Image
+                        HorizontalOptions="Center"
+                        HeightRequest="25"
+                        WidthRequest="50"
+                        Source="gps.png"
+                        x:Name="imgGps"
+                    >
+
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer
+                                x:Name="TapLocation"
+                                Tapped="ClickLocation_Tapped"
+                            />
+                            </Image.GestureRecognizers>
+                        </Image>
+                        <Entry
+                        x:Name="entrySearch"
+                        Placeholder="Press Enter to search by name or by zipcode"
+                        WidthRequest="325"
+                        TextColor="DimGrey"
+                        PlaceholderColor="DimGrey"
+                        BackgroundColor="GhostWhite"
+                        Completed="ImageButton_Clicked"
+                    />
+                        <Image
+                        HorizontalOptions="EndAndExpand"
+                        HeightRequest="25"
+                        WidthRequest="50"
+                        Source="settings.png"
+                        x:Name="imgSettings"
+                    >
+
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer
+                                x:Name="tapSettings"
+                                Tapped="ToSettings"
+                            />
+                            </Image.GestureRecognizers>
+                        </Image>
+                    </StackLayout>
+
+                    <StackLayout Grid.Row="1" Orientation="Vertical">
+                        <Label
+                        x:Name="LblCity"
+                        FontSize="40"
+                        HorizontalOptions="Center"
+                        TextColor="Black"
+                    />
+                        <Label
+                        x:Name="LblWeatherDescription"
+                        FontSize="Medium"
+                        HorizontalOptions="Center"
+                        TextColor="Black"
+                    />
+                    </StackLayout>
+
+                    <Image
+                    Grid.Row="2"
+                    x:Name="ImgWeatherIcon"
+                    VerticalOptions="Start"
+                    HeightRequest="100"
+                    WidthRequest="300"
+                />
+
+                    <Grid
+                    Grid.Row="3"
+                    RowDefinitions="Auto,Auto,Auto"
+                    ColumnDefinitions="0.33*,0.33*,0.33*"
+                    Margin="0"
+                >
+                        <Image
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        HorizontalOptions="Center"
+                        HeightRequest="25"
+                        Source="rain_high_weather_percentage_precipitation_drop_humidity.png"
+                        x:Name="imgHumidity"
+                        IsVisible="false"
+                    />
+                        <Label
+                        x:Name="LblHumidity"
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        HorizontalOptions="Center"
+                    />
+                        <Label
+                        x:Name="LblTemperature"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Grid.RowSpan="2"
+                        HorizontalOptions="Center"
+                        FontSize="40"
+                        FontAttributes="Bold"
+                    />
+                        <Image
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        HorizontalOptions="Center"
+                        HeightRequest="25"
+                        Source="weather_wind_speed_fast_breeze_windy.png"
+                        x:Name="imgWind"
+                        IsVisible="false"
+                    />
+                        <Label
+                        x:Name="LblWind"
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        HorizontalOptions="Center"
+                    />
+                        <Label
+                        x:Name="LblCurrentDay"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        HeightRequest="25"
+                        HorizontalOptions="Center"
+                    />
+                    </Grid>
+
+                    <CollectionView
+                    Grid.Row="3"
+                    x:Name="CvWeather"
+                    HeightRequest="250"
+                    WidthRequest="900"
+                    Margin="125"
+                        HorizontalScrollBarVisibility="Always"
+                >
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout
+                            Orientation="Horizontal"
+                            ItemSpacing="20"
+                        />
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid
+                                Grid.Row="4"
+                                RowDefinitions="Auto, Auto, Auto,Auto"
+                            >
+                                    <Image
+                                    Grid.Row="0"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Start"
+                                    HeightRequest="50"
+                                    WidthRequest="50"
+                                    Source="{Binding weather[0].customIcon}"
+                                />
+                                    <Label
+                                    Grid.Row="1"
+                                    FontSize="Large"
+                                    HorizontalOptions="Center"
+                                    Text="{Binding main.temp_symb}"
+                                />
+
+                                    <Label
+                                    Grid.Row="2"
+                                    FontSize="Small"
+                                    HorizontalOptions="Center"
+                                    Text="{Binding TimeZoneTime}"
+                                />
+                                    <Label
+                                    Grid.Row="3"
+                                    FontSize="Small"
+                                    HorizontalOptions="Center"
+                                    Text="{Binding what}"
+                                />
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</ContentPage>
